@@ -30,11 +30,12 @@
 #include <cstdlib>
 #include <fstream>
 #include <string>
+#include <string.h>
 
 #ifdef VS_TARGET_OS_WINDOWS
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-#else 
+#else
 #include <dlfcn.h>
 #endif
 
@@ -45,6 +46,8 @@ static std::atomic<int> scriptID(1000);
 static bool initialized = false;
 static PyThreadState *ts = nullptr;
 static PyGILState_STATE s;
+
+extern const VSAPI vs_internal_vsapi;
 
 #ifdef VS_TARGET_OS_WINDOWS
 #define MODULE_HANDLE_TYPE HMODULE

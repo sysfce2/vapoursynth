@@ -206,9 +206,8 @@ vapoursynth_dep = declare_dependency(
 if enable_vsscript
     libvsscript = library('vapoursynth-script',
         files('src/vsscript/vsscript.cpp'),
-        dependencies: py_dep,
+        dependencies: [py_dep, vapoursynth_dep],
         gnu_symbol_visibility: 'hidden',
-        include_directories: incdir,
         install: true,
         soversion: run_command('grep', '-m', '1', 'VSSCRIPT_API_MAJOR', 'include/VSScript4.h', check: true).stdout().strip().split()[2],
     )
