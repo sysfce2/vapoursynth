@@ -83,10 +83,10 @@ __all__ = [
 
   'core',
   
-  'check_vsscript_env',
   'register_install',
   'register_vfw',
   'vspipe',
+  'vsscript_check_env',
   'vsscript_config',
 ]
 
@@ -3896,6 +3896,7 @@ def register_install():
     
     if not write_registry_entries(entries, use_hklm):
         print('Couldn\'t write paths to registry!')
+        sys.exit(1)
     else:
         print('Successfully wrote paths to registry!')
 
@@ -3968,6 +3969,7 @@ def register_vfw():
     
     if not write_registry_entries(entries, use_hklm):
         print('Couldn\'t register VFW provider!')
+        sys.exit(1)
     else:
         print('VFW provider successfully registered!')
 
@@ -3975,6 +3977,5 @@ def vspipe():
     import subprocess
     vspipe_path = PurePath(__file__)
     vspipe_path = vspipe_path.with_name('vspipe')
-    if sys.platform == 'win32':
-        vspipe_path = vspipe_path.with_suffix('.exe')
-    subprocess.run([vspipe_path, *sys.argv[1:]])
+    ret = subprocess.run([vspipe_path, *sys.argv[1:]])
+    sys.exit(ret.returncode)
