@@ -965,7 +965,7 @@ private:
 public:
     VSThreadPool(VSCore *core);
     ~VSThreadPool();
-    void returnFrame(const VSFrameContext *rCtx, const PVSFrame &f);
+    void returnFrame(VSFrameContext *rCtx, const PVSFrame &f);
     size_t threadCount();
     size_t setThreadCount(size_t threads);
     void startExternal(const PVSFrameContext &context);

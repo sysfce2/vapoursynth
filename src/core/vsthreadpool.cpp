@@ -325,12 +325,16 @@ void VSThreadPool::startExternal(const PVSFrameContext &context) {
     wakeThread();
 }
 
-void VSThreadPool::returnFrame(const VSFrameContext *rCtx, const PVSFrame &f) {
+void VSThreadPool::returnFrame(VSFrameContext *rCtx, const PVSFrame &f) {
     assert(rCtx->frameDone);
     bool outputLock = rCtx->lockOnOutput;
     // we need to unlock here so the callback may request more frames without causing a deadlock
     // AND so that slow callbacks will only block operations in this thread, not all the others
     taskLock.unlock();
+
+    // don't hold on to frame references only used for processing while waiting to output
+    rCtx->availableFrames.clear();
+
     if (rCtx->hasError()) {
         if (outputLock)
             callbackLock.lock();
